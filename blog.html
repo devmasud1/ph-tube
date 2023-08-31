@@ -5,13 +5,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog</title>
+    <!-- favIcon -->
+    <link rel="shortcut icon" href="./image/Icon.png" type="image/x-icon">
+    <!-- google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- daisyUi -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.6.4/dist/full.css" rel="stylesheet" type="text/css" />
+    <!-- tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- custom css -->
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
-    <main>
-        Discuss the scope of var, let, and const
-        Tell us the use cases of null and undefined
-        What do you mean by REST API?
+    <header class="container mx-auto">
+        <div class="block w-1/2 md:w-full m-auto text-center md:flex justify-between items-center py-10">
+            <div>
+                <a href="./index.html">
+                    <img src="./image/Logo.png" alt="logo">
+                </a>
+            </div>
+
+            <div>
+                <a href="./blog.html" class="btn btn-error text-white">Blog</a>
+            </div>
+
+        </div>
+        <hr>
+    </header>
+    <main class="container mx-auto my-10">
+        <div class="collapse collapse-plus bg-base-200">
+            <input type="radio" name="my-accordion-3" checked="checked" />
+            <div class="collapse-title text-xl font-medium">
+                Click to open this one and close others
+            </div>
+            <div class="collapse-content">
+                <p>hello</p>
+            </div>
+        </div>
+        <div class="collapse collapse-plus bg-base-200 my-10">
+            <input type="radio" name="my-accordion-3" />
+            <div class="collapse-title text-xl font-medium">
+                Click to open this one and close others
+            </div>
+            <div class="collapse-content">
+                <p>hello</p>
+            </div>
+        </div>
+        <div class="collapse collapse-plus bg-base-200">
+            <input type="radio" name="my-accordion-3" />
+            <div class="collapse-title text-xl font-medium">
+                Click to open this one and close others
+            </div>
+            <div class="collapse-content">
+                <p>hello</p>
+            </div>
+        </div>
     </main>
 </body>
 

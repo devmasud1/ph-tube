@@ -19,36 +19,55 @@ const handleAllCategory = async () => {
     //console.log(element);
     const div = document.createElement("div");
     div.innerHTML = `
-        <button onclick="displayVideoData('${category_id}')" class="btn btn-default">${category}</button>
+        <button onclick="findDisplayData('${category_id}')" class="btn btn-default">${category}</button>
         `;
     menuItem.appendChild(div);
   });
 
-  displayVideoData(1003);
+  findDisplayData(1000);
 };
 
-const displayVideoData = async (category_id) => {
+const findDisplayData = async (category_id) => {
   const res = await fetch(
     `https://openapi.programming-hero.com/api/videos/category/${category_id}`
   );
   const data = await res.json();
   const result = data.data;
 
+  displayVideoData(result);
+};
+
+const displayVideoData = async (result) => {
+  // console.log(result)
+
+  const notAvailableData = document.getElementById("not-available-data");
+
+  if (result.length === 0) {
+    notAvailableData.classList.remove("hidden");
+    console.log("no");
+    // notFound.classList.remove("hidden");
+  } else {
+    notAvailableData.classList.add("hidden");
+  }
+
   const cardContainer = document.getElementById("card-container");
   cardContainer.textContent = "";
 
   result.forEach((item) => {
     const { thumbnail, title, others } = item;
-    console.log(item, item.authors[0].verified);
+
+    // console.log(item, item.authors[0].verified);
     const div = document.createElement("div");
     div.innerHTML = `
-        <!-- card1 -->
+        <!-- card -->
         <div class="card">
             <div class="h-[300px] my-10">
                 <div class="bg-[url('${thumbnail}')] bg-cover bg-no-repeat bg-center w-full h-full">
-                    <p class="text-center bg-black text-white w-1/2 absolute right-0 bottom-1/3">
-                    ${others.posted_date? others.posted_date : ''}
-                      </p>
+                      ${
+                        others.posted_date
+                          ? `  <p class="text-center bg-black text-white py-2 w-1/2 absolute right-0 bottom-1/3">  ${others.posted_date} </p>`
+                          : ""
+                      }
                 </div>
             </div>
             <div class="flex gap-5">
@@ -82,11 +101,6 @@ const displayVideoData = async (category_id) => {
   });
 };
 
-//thumbnail
-//title
-
-// authors[0].profile_picture
-// authors[0].profile_name
-// item.authors[0].profile_verified
-
 handleAllCategory();
+
+///items.sort((a, b) => a.value - b.value);
