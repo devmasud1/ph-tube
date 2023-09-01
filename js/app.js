@@ -11,21 +11,26 @@ const handleAllCategory = async () => {
   );
   const result = await url.json();
   const category = result.data;
+  //console.log(category[0])
   const menuItem = document.getElementById("menu-item");
 
   category.forEach((element) => {
     const { category, category_id } = element;
+
     const div = document.createElement("div");
     div.innerHTML = `
-        <button onclick="findDisplayData('${category_id}')" class="btn btn-default">${category}</button>
+        <button onclick="findDisplayData('${category_id}')"  class="btn btn-default">${category}</button>
         `;
     menuItem.appendChild(div);
-  });
 
-  findDisplayData();
+    findDisplayData(1000);
+  });
 };
 
-const findDisplayData = async (category_id = "1000") => {
+var sharedData;
+
+const findDisplayData = async (category_id) => {
+  sharedData = category_id;
   const res = await fetch(
     `https://openapi.programming-hero.com/api/videos/category/${category_id}`
   );
@@ -35,9 +40,26 @@ const findDisplayData = async (category_id = "1000") => {
   displayVideoData(result);
 };
 
-const displayVideoData = async (result) => {
-  const notAvailableData = document.getElementById("not-available-data");
+const shortBYview = async () => {
+  var id = sharedData;
+  const res = await fetch(
+    `https://openapi.programming-hero.com/api/videos/category/${id}`
+  );
+  const data = await res.json();
+  const result = data.data;
+  console.log(result);
+  const sortingArray = result.sort((a, b) => {
+    const vA = parseFloat(a.others.views);
+    const vB = parseFloat(b.others.views);
 
+    return (views = vB - vA);
+  });
+  console.log(sortingArray);
+  displayVideoData(sortingArray);
+};
+
+const displayVideoData = (result) => {
+  const notAvailableData = document.getElementById("not-available-data");
   if (result.length === 0) {
     notAvailableData.classList.remove("hidden");
   } else {
@@ -50,6 +72,7 @@ const displayVideoData = async (result) => {
   result.forEach((item) => {
     let convertTime = convertMSToHMS(item.others.posted_date);
     const { thumbnail, title, others } = item;
+
     const div = document.createElement("div");
     div.innerHTML = `
         <!-- card -->
@@ -74,7 +97,9 @@ const displayVideoData = async (result) => {
                 <div class="leading-8">
                     <h4 class="font-medium md:font-semibold lg:font-bold">${title}</h4>
                     <div class="flex items-center">
-                        <p class="me-5">${item.authors[0].profile_name}</p>                   
+                        <p class="me-5">${
+                          item.authors[0].profile_name
+                        }</p>                   
                       <div>
                       ${
                         item.authors[0].verified
@@ -95,7 +120,6 @@ const displayVideoData = async (result) => {
 const convertMSToHMS = (second) => {
   const hours = Math.floor(second / 3600);
   const minutes = Math.floor((second % 3600) / 60);
-
   if (hours === 0 && minutes === 0) {
     return "";
   }
@@ -104,5 +128,3 @@ const convertMSToHMS = (second) => {
 };
 
 handleAllCategory();
-
-// arrayOfObjects.sort((a, b) => b.age - a.age);
