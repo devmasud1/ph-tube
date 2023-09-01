@@ -11,12 +11,10 @@ const handleAllCategory = async () => {
   );
   const result = await url.json();
   const category = result.data;
-
   const menuItem = document.getElementById("menu-item");
 
   category.forEach((element) => {
     const { category, category_id } = element;
-    //console.log(element);
     const div = document.createElement("div");
     div.innerHTML = `
         <button onclick="findDisplayData('${category_id}')" class="btn btn-default">${category}</button>
@@ -24,10 +22,10 @@ const handleAllCategory = async () => {
     menuItem.appendChild(div);
   });
 
-  findDisplayData(1000);
+  findDisplayData();
 };
 
-const findDisplayData = async (category_id) => {
+const findDisplayData = async (category_id = "1000") => {
   const res = await fetch(
     `https://openapi.programming-hero.com/api/videos/category/${category_id}`
   );
@@ -38,14 +36,10 @@ const findDisplayData = async (category_id) => {
 };
 
 const displayVideoData = async (result) => {
-  // console.log(result)
-
   const notAvailableData = document.getElementById("not-available-data");
 
   if (result.length === 0) {
     notAvailableData.classList.remove("hidden");
-    console.log("no");
-    // notFound.classList.remove("hidden");
   } else {
     notAvailableData.classList.add("hidden");
   }
@@ -54,20 +48,19 @@ const displayVideoData = async (result) => {
   cardContainer.textContent = "";
 
   result.forEach((item) => {
+    let convertTime = convertMSToHMS(item.others.posted_date);
     const { thumbnail, title, others } = item;
-
-    // console.log(item, item.authors[0].verified);
     const div = document.createElement("div");
     div.innerHTML = `
         <!-- card -->
         <div class="card">
             <div class="h-[300px] my-10">
                 <div class="bg-[url('${thumbnail}')] bg-cover bg-no-repeat bg-center w-full h-full">
-                      ${
-                        others.posted_date
-                          ? `  <p class="text-center bg-black text-white py-2 w-1/2 absolute right-0 bottom-1/3">  ${others.posted_date} </p>`
-                          : ""
-                      }
+                 ${
+                   convertTime
+                     ? `<p class="text-center bg-black text-white py-2 w-1/2 absolute right-0 bottom-1/3">${convertTime}</p>`
+                     : ""
+                 }
                 </div>
             </div>
             <div class="flex gap-5">
@@ -80,10 +73,8 @@ const displayVideoData = async (result) => {
                 </div>
                 <div class="leading-8">
                     <h4 class="font-medium md:font-semibold lg:font-bold">${title}</h4>
-
                     <div class="flex items-center">
-                        <p class="me-5">${item.authors[0].profile_name}</p>
-                      
+                        <p class="me-5">${item.authors[0].profile_name}</p>                   
                       <div>
                       ${
                         item.authors[0].verified
@@ -101,6 +92,17 @@ const displayVideoData = async (result) => {
   });
 };
 
+const convertMSToHMS = (second) => {
+  const hours = Math.floor(second / 3600);
+  const minutes = Math.floor((second % 3600) / 60);
+
+  if (hours === 0 && minutes === 0) {
+    return "";
+  }
+
+  if (hours) return hours + "hrs" + " " + minutes + " " + "min ago";
+};
+
 handleAllCategory();
 
-///items.sort((a, b) => a.value - b.value);
+// arrayOfObjects.sort((a, b) => b.age - a.age);
